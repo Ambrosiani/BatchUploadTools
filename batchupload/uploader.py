@@ -290,7 +290,7 @@ def up_all_from_url(info_path, cutoff=None, target='upload_logs',
         # stop here if testing
 
         result = upload_single_file(
-            filename, url, txt, target_site, upload_if_duplicate=True, upload_if_badprefix=True)
+            filename, url, txt, target_site, ignore_all_warnings=True, upload_if_badprefix=True)
         if result.get('error'):
             logs['error'].write(url)
         elif result.get('warning'):
