@@ -92,7 +92,7 @@ def upload_single_file(file_name, media_file, text, target_site,
                         file_page.title(), e)
     else:
         if result.get('warning'):
-            result['log'] = 'UPDATED Warning: %s: %s' % (file_page.title(),
+            result['log'] = 'Warning: %s: %s' % (file_page.title(),
                                                  result['warning'])
         elif success:
             result['log'] = '%s: success' % file_page.title()
@@ -196,7 +196,7 @@ def up_all(in_path, cutoff=None, target='Uploaded', file_exts=None,
 
 def up_all_from_url(info_path, cutoff=None, target='upload_logs',
                     file_exts=None, verbose=False, test=False,
-                    target_site=None, only=None, skip=None):
+                    target_site=None, ignore_warnings=False, only=None, skip=None):
     """
     Upload all images provided as urls in a make_info json file.
 
@@ -215,6 +215,7 @@ def up_all_from_url(info_path, cutoff=None, target='upload_logs',
     @param test: set to True to test but not upload
     @param target_site: pywikibot.Site to which file should be uploaded,
         defaults to Commons.
+    @param ignore_warnings: ignore warnings when uploading.
     @param only: list of urls to upload, if provided all others will be skipped
     @param skip: list of urls to skip, all others will be uploaded
     """
@@ -290,7 +291,7 @@ def up_all_from_url(info_path, cutoff=None, target='upload_logs',
         # stop here if testing
 
         result = upload_single_file(
-            filename, url, txt, target_site, ignore_all_warnings=True, upload_if_badprefix=True)
+            filename, url, txt, target_site, ignore_all_warnings=ignore_warnings, upload_if_badprefix=True)
         if result.get('error'):
             logs['error'].write(url)
         elif result.get('warning'):
@@ -380,6 +381,7 @@ def main(*args):
     typ = 'files'
     only = None
     skip = None
+    ignore_warnings = False
 
     # Load pywikibot args and handle local args
     for arg in pywikibot.handle_args(args):
@@ -395,6 +397,8 @@ def main(*args):
             confirm = True
         elif option == '-nochunk':
             chunked = False
+        elif option == '-ignore_warnings':
+            ignore_warnings = True
         elif option == '-type':
             if value.lower() == 'url':
                 typ = 'url'
@@ -417,7 +421,7 @@ def main(*args):
                    chunked=chunked)
         elif typ == 'url':
             up_all_from_url(in_path, cutoff=cutoff, only=only, skip=skip,
-                            test=test, verbose=confirm)
+                            test=test, ignore_warnings=ignore_warnings, verbose=confirm)
     else:
         pywikibot.output(usage)
 
