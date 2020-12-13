@@ -47,6 +47,7 @@ def upload_single_file(file_name, media_file, text, target_site,
         ignored_warnings.append('exists')
     if upload_if_duplicate:
         ignored_warnings.append('duplicate')
+        ignored_warnings.append('duplicate-archive')
     if upload_if_badprefix:
         ignored_warnings.append('bad-prefix')
     if ignore_all_warnings:
