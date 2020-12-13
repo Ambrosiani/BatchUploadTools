@@ -91,7 +91,7 @@ def upload_single_file(file_name, media_file, text, target_site,
                         file_page.title(), e)
     else:
         if result.get('warning'):
-            result['log'] = 'Warning: %s: %s' % (file_page.title(),
+            result['log'] = 'UPDATED Warning: %s: %s' % (file_page.title(),
                                                  result['warning'])
         elif success:
             result['log'] = '%s: success' % file_page.title()
@@ -289,7 +289,7 @@ def up_all_from_url(info_path, cutoff=None, target='upload_logs',
         # stop here if testing
 
         result = upload_single_file(
-            filename, url, txt, target_site, upload_if_badprefix=True)
+            filename, url, txt, target_site, upload_if_duplicate=True, upload_if_badprefix=True)
         if result.get('error'):
             logs['error'].write(url)
         elif result.get('warning'):
